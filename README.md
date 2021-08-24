@@ -1,7 +1,7 @@
 # Chess
 Do you like Chess? But you also like Factorio? You can now do both at the same time!
 
-This mod provides placable chess pieces in black and white. The pieces don't do anything else, so they have to be moved manually.
+This mod provides chess pieces in black and white. The pieces don't do anything else, so they have to be moved manually.
 A chess board can be created with the light and dark tiles.
 
 # Building (linux)

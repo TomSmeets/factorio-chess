@@ -15,6 +15,7 @@ cp ./LICENSE           ./out/chess
 cp ./data.lua          ./out/chess
 cp ./assets/black.png  ./out/chess/assets
 cp ./assets/white.png  ./out/chess/assets
+cp -r ./locale         ./out/chess/locale
 
 mkdir -p ./out/chess/assets/cburnett
 inkscape --export-type=png -w 128 -h 128 ./assets/cburnett/*.svg
