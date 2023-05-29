@@ -1,8 +1,16 @@
+-- data.lua - define the new chess items and entities
+-- Copyright Tom Smeets 2023 <tom@tsmeets.nl>
+
+-- register a new chess piece
+--   kind: which piece it is 'wP' is 'white pawn', 'bN' is 'black knight'
 function make_piece(kind, order)
+    -- which art pack to use, currently we only have cburnett
     local pack = "cburnett"
     local image = "__chess__/assets/"..pack.."/" .. kind .. ".png"
     local name = "chess-piece-" .. pack .. "-" .. kind
     data:extend({
+        -- The item version, that is present in your inventory
+        -- becomes the entity once placed
         {
             type = "item",
             name = name,
@@ -13,6 +21,9 @@ function make_piece(kind, order)
             place_result = name,
             stack_size = 50
         },
+
+        -- the crafting recipe for the above item
+        -- currently they are very cheap
         {
             type = "recipe",
             name = name,
@@ -22,6 +33,8 @@ function make_piece(kind, order)
             },
             result = name
         },
+
+        -- the actually entity on the ground
         {
             type = "simple-entity",
             name = name,
@@ -48,6 +61,8 @@ function make_piece(kind, order)
     })
 end
 
+-- Register a new placeable background tile for a given color
+-- color is either 'white' or 'black'
 function make_tile(color)
     local name = "chess-tile-" .. color
     local image = "__chess__/assets/" .. color .. ".png"
@@ -101,6 +116,7 @@ function make_tile(color)
     })
 end
 
+-- register the actual pieces
 make_piece("wP", "aa");
 make_piece("wN", "ab");
 make_piece("wB", "ac");
