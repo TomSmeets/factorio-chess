@@ -35,8 +35,10 @@ function make_piece(kind, order)
         },
 
         -- the actually entity on the ground
+        -- a simple-entity-with-owner type implements the EntityWithOwner prototype
+        -- and has all properties of 'normal' placable entities in factorio
         {
-            type = "simple-entity",
+            type = "simple-entity-with-owner",
             name = name,
             fast_replaceable_group = "chess-piece",
             collision_box = { { -0.6, -0.6 }, {  0.6,  0.6 } },
