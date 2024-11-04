@@ -1,5 +1,6 @@
 -- data.lua - define the new chess items and entities
 -- Copyright Tom Smeets 2023 <tom@tsmeets.nl>
+local tile_collision_masks = require("__base__/prototypes/tile/tile-collision-masks")
 
 -- register a new chess piece
 --   kind: which piece it is 'wP' is 'white pawn', 'bN' is 'black knight'
@@ -14,12 +15,12 @@ function make_piece(kind, order)
         {
             type = "item",
             name = name,
+            order = order .. "[" .. name .. "]",
+
+            stack_size = 50,
             icon = image,
             icon_size = 128,
-            icon_mipmaps = 1,
-            order = order .. "[" .. name .. "]",
-            place_result = name,
-            stack_size = 50
+            place_result = name
         },
 
         -- the crafting recipe for the above item
@@ -27,11 +28,12 @@ function make_piece(kind, order)
         {
             type = "recipe",
             name = name,
-            enabled = true,
             ingredients = {
-                { "stone", 4 },
+                { type = "item", name = "stone", amount = 4 }
             },
-            result = name
+            results = {
+                { type = "item", name = name, amount = 1 }
+            }
         },
 
         -- the actually entity on the ground
@@ -40,25 +42,32 @@ function make_piece(kind, order)
         {
             type = "simple-entity-with-owner",
             name = name,
-            fast_replaceable_group = "chess-piece",
+
+            -- Entity
+            icon = image,
+            icon_size = 128,
             collision_box = { { -0.6, -0.6 }, {  0.6,  0.6 } },
             selection_box = { { -0.8, -0.8 }, {  0.8,  0.8 } },
             flags = { "placeable-neutral", "player-creation" },
-            icon = image,
-            icon_mipmaps = 4,
-            icon_size = 128,
-            pictures = {
-                filename = image,
-                priority = "extra-high",
-                width = 128,
-                height = 128,
-                scale = 0.5,
-            },
-            max_health = 50,
             minable = {
                 mining_time = 0.1,
-                result = name
+                results = {
+                    { type = "item", name = name, amount = 1 }
+                }
             },
+            fast_replaceable_group = "chess-piece",
+
+            -- Entyty With Health
+            max_health = 50,
+
+            -- Simple Entity With Owner
+            pictures = {
+                {
+                    filename = image,
+                    size = 128,
+                    scale = 0.5
+                }
+            }
         }
     })
 end
@@ -73,7 +82,9 @@ function make_tile(color)
             type = "tile",
             name = name,
             order = "z[other]-b[lab]-c[lab-white]",
-            collision_mask = {"ground-tile"},
+
+            -- Tile Prototype
+            collision_mask = tile_collision_masks.ground,
             layer = 61,
             minable     = { mining_time = 0.025, result = name },
             mined_sound = { filename = "__base__/sound/deconstruct-bricks.ogg",volume = 0.8},
@@ -88,22 +99,21 @@ function make_tile(color)
                 },
                 empty_transitions = true
             },
-            map_color={ r=1, g=1, b=1 },
-            pollution_absorption_per_second = 0,
+            map_color={ r=1, g=1, b=1 }
         },
         {
             type = "item",
             name = name,
+            order = "a[" .. name .. "]",
+
+            stack_size = 50,
             icon = image,
             icon_size = 32,
-            icon_mipmaps = 1,
-            order = "a[" .. name .. "]",
-            stack_size = 50,
             place_as_tile = {
                 result = name,
                 result_count = 4,
                 condition_size = 1,
-                condition = { "water-tile" }
+                condition = { layers={water_tile=true} }
             }
         },
         {
@@ -111,9 +121,11 @@ function make_tile(color)
             name = name,
             enabled = true,
             ingredients = {
-                { "stone", 1 },
+                { type = "item", name = "stone", amount = 1 },
             },
-            result = name
+            results = {
+                { type = "item", name = name, amount = 1 }
+            }
         },
     })
 end
